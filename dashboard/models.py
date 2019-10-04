@@ -7,7 +7,9 @@ class CustomUserModel(models.Model):
         User,
         on_delete=models.CASCADE,
     )
-    file_on_page = models.IntegerField(default=-1)
+    file_on_page = models.IntegerField(
+        default=-1
+    )
 
     def __str__(self):
         return f'{self.author}-{self.file_on_page}'
@@ -18,8 +20,12 @@ class UploadFileModel(models.Model):
         User,
         on_delete=models.CASCADE,
     )
-    title = models.CharField(max_length=50)
-    file = models.FileField(upload_to='uploads/')
+    title = models.CharField(
+        max_length=50
+        )
+    file = models.FileField(
+        upload_to='uploads/'
+    )
 
     def __str__(self):
         return f'{self.author}-{self.title}'
@@ -48,9 +54,19 @@ class FileColumnModel(models.Model):
         UploadFileModel,
         on_delete=models.CASCADE
     )
-    column = models.CharField(max_length=100)
-    type = models.CharField(choices=COLUMN_TYPE_CHOICES, default='numeric', max_length=20)
-    dependence = models.CharField(choices=COLUMN_DEPENDENCE_CHOICES, default='dependent', max_length=20)
+    column = models.CharField(
+        max_length=100
+    )
+    type = models.CharField(c
+        hoices=COLUMN_TYPE_CHOICES, 
+        default='numeric',
+        max_length=20
+    )
+    dependence = models.CharField(
+        choices=COLUMN_DEPENDENCE_CHOICES, 
+        default='dependent', 
+        max_length=20
+    )
 
     def __str__(self):
         return f'{self.column} - {self.type}'
