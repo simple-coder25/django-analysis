@@ -81,7 +81,6 @@ class UploadFieldView(FormView):
             instance.save()
 
             column_info = self.get_columns_info(instance.file.url)
-        
             if column_info:
                 headers = column_info[0]
                 types = column_info[1]
@@ -91,7 +90,6 @@ class UploadFieldView(FormView):
                         _type = 'numeric'
                     else:
                         _type = 'categorical'
-
                     FileColumnModel.objects.create(column=column, file=instance, type=_type)
             context = {
                 'message': f'File {instance.title} was uploaded successfully'
