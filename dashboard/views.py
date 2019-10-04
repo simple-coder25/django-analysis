@@ -79,12 +79,10 @@ class UploadFieldView(FormView):
             instance = form.save(commit=False)
             instance.author = request.user
             instance.save()
-
             column_info = self.get_columns_info(instance.file.url)
             if column_info:
                 headers = column_info[0]
                 types = column_info[1]
-
                 for column in headers:
                     if types[column] in ['int64', 'float64']:
                         _type = 'numeric'
