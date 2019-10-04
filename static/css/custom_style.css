@@ -1,0 +1,62 @@
+.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 70px;
+    color: white;
+    background: #f8f9fa;
+    border-right: 1px solid #999;
+}
+
+.sidenav a {
+	text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    display: block;
+    border: 1px solid #999;
+    margin: 15px 5px;
+    border-radius: 5px;
+    padding: 5px 0
+}
+
+i {
+	color: black;
+}
+
+.mt-80 {
+    margin-top: 80px;
+}
+
+.custom-btn {
+    background-color: #fff;
+    border-color: #545b62;
+    color: #000;
+}
+
+.custom-btn:hover {
+    background-color: #5a6268;
+    color: #fff;
+}
+
+.active-btn {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.google-logo {
+    width: 40px;
+    height: 40px;
+}
+
+.google-link {
+    display: block;
+    width: 100px;
+}
+
+.logo-block {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}

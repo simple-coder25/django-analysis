@@ -1,0 +1,71 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-80">
+        <div class="col-9">
+            <div class="row">
+                {% if empty_object_list %}
+                    <div class="offset-1 col-lg-12">
+                        <div class="alert alert-warning text-center h5" role="alert">
+                            You don't have any uploaded files. Please upload a file
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="offset-2 col-md-11 text-center text-uppercase font-weight-bold mb-5">
+                        <div class="alert alert-info bold" role="alert">
+                            Formatters management
+                        </div>
+                    </div>
+                    <table class="offset-2 table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Column</th>
+                                <th>Inequality</th>
+                                <th>Value</th>
+                                <th>Skip Row</th>
+                                <th>New Value</th>
+                                <th>Applied</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for formatter in formatters %}
+                                <tr>
+                                    <td>{{ formatter.file.title }}</td>
+                                    <td>{{ formatter.column }}</td>
+                                    <td>{{ formatter.inequality }}</td>
+                                    <td>{{ formatter.value }}</td>
+                                    <td>{{ formatter.skip_row }}</td>
+                                    {% if formatter.new_value is not None %}
+                                        <td>{{ formatter.new_value }}</td>
+                                    {% else %}
+                                        <td> - </td>
+                                    {% endif %}
+                                    <td>{{ formatter.applied }}</td>
+                                    <td>
+                                        <a href="{% url 'edit-formatter' formatter.pk %}" class="btn btn-success">Edit</a>
+                                    </td>
+                                    <td>
+                                        <form action="{% url 'delete-formatter' formatter.pk %}" method="POST">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="offset-10 col-2">
+                        <form action="{% url 'manage-formatters' %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Apply all</button>
+                       </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

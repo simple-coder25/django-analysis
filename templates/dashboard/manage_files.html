@@ -1,0 +1,51 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-80">
+        <div class="col-9">
+            <div class="row">
+                {% if empty_object_list %}
+                    <div class="offset-1 col-lg-12">
+                        <div class="alert alert-warning text-center h5" role="alert">
+                            You don't have any uploaded files. Please upload a file
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="offset-2 col-md-11 text-center text-uppercase font-weight-bold mb-5">
+                        <div class="alert alert-info bold" role="alert">
+                            Files management
+                        </div>
+                    </div>
+                    <table class="offset-2 table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Download</th>
+                                <th>Delete file</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for file in files %}
+                                <tr>
+                                    <td>{{ file.title }}</td>
+                                    <td>{{ file.author }}</td>
+                                    <td>
+                                        <a href="{{ file.file.url }}" class="btn btn-success">Download file</a>
+                                    </td>
+                                    <td>
+                                        <form action="{% url 'delete-file' file.pk %}" method="POST">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Delete file</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

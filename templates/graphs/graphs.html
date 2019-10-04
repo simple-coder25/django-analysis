@@ -1,0 +1,160 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    {% if line_dataset %}
+        <div class="container mt-80">
+            <div class="row">
+                <div class="offset-2 col-md-8 text-center text-uppercase font-weight-bold">
+                    <div class="alert alert-info bold" role="alert">
+                        Build Graphs
+                    </div>
+                </div>
+            </div>
+            <div class="offset-5 text-uppercase font-weight-bold mt-2 mb-4">
+                <a href="{{ request.META.HTTP_REFERER }}">&#8592; Back to choose column</a>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="header">
+                        <h3>Line Graph</h3>
+                    </div>
+                    <canvas class="my-4 w-100" id="line_graph" width="1100" height="480"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="header">
+                        <h3 class="mt-5">Frequency Distribution</h3>
+                        <div class="content table-responsive table-full-width">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Value</th>
+                                    <th>Frequency</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for k, v in frequency_info.items %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ k }}</td>
+                                        <td>{{ v }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="container mt-80">
+            <div class="row">
+                <div class="offset-2 col-md-8 text-center text-uppercase font-weight-bold">
+                    <div class="alert alert-info bold" role="alert">
+                        Build Graphs
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-1 col-4 mt-5 mx-auto">
+                    <form method="GET" class="pb-5">
+                        <div class="form-group w-100">
+                            <label for="exampleFormControlSelect1">Select a file</label>
+                            <select class="form-control" id="exampleFormControlSelect1" name="file_id">
+                                {% for file in files %}
+                                    <option value="{{ file.pk }}">{{ file.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Select</button>
+                    </form>
+                </div>
+            </div>
+            {% if chose_file_form %}
+                <div class="row">
+                    <div class="offset-3 col-4 mt-2 mx-auto">
+                        <form method="GET" class="pb-5">
+                            <label for="id_column" class="control-label requiredField">
+                                Column<span class="asteriskField">*</span>
+                            </label>
+                            <div class="controls">
+                                {{ chose_file_form.column }}
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3">Build Graphs</button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        const ctx = document.getElementById("line_graph");
+        let myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ line_labels }},
+                datasets: [{
+                    data: {{ line_dataset }},
+                    lineTension: 2,
+                    backgroundColor: 'transparent',
+                    borderColor: '#007bff',
+                    borderWidth: 1,
+                    pointBackgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: false,
+                }
+            }
+        });
+    </script>
+
+    <script>
+        const ctx = document.getElementById("frequency_distribution");
+        let myChartFrequency = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ frequency_labels }},
+                datasets: [{
+                    data: {{ frequency_dataset }},
+                    lineTension: 2,
+                    backgroundColor: 'transparent',
+                    borderColor: '#007bff',
+                    borderWidth: 1,
+                    pointBackgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: false,
+                }
+            }
+        });
+    </script>
+{% endblock %}
+

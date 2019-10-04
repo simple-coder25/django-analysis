@@ -1,0 +1,48 @@
+{% extends 'basic.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <div class="container mt-80">
+        <div class="row">
+            <div class="offset-2 col-md-8 text-center text-uppercase font-weight-bold">
+                {% if message %}
+                    <div class="alert alert-success bold" role="alert">
+                        {{ message }}
+                    </div>
+                    <div class="">
+                        <a href="{% url 'manage-formatters' %}">&#8592; Manage formatters</a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info bold" role="alert">
+                        Formatting files
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if not message %}
+            <div class="offset-1 col-4 mt-5 mx-auto">
+                <form method="GET" class="pb-5">
+                    <div class="form-group w-100">
+                        <label for="exampleFormControlSelect1">Select a file</label>
+                        <select class="form-control" id="exampleFormControlSelect1" name="file_id">
+                            {% for file in files %}
+                                <option value="{{ file.pk }}">{{ file.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Select</button>
+                </form>
+            </div>
+        {% endif %}
+        {% if chose_file_form %}
+            <div class="offset-3 col-4 mt-2 mx-auto">
+                <form method="POST" class="pb-5">
+                    {% csrf_token %}
+                    {{ chose_file_form|crispy }}
+                    <button type="submit" class="btn btn-success mt-3">Add format filter</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
