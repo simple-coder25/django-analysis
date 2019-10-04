@@ -23,15 +23,11 @@ class FormattingView(View):
         
         files = self.model.objects.filter(author=self.request.user)
         file_id = self.request.GET.get('file_id')
-
         if file_id:
             file = self.model.objects.get(pk=file_id)
             form = ValidationForm(file=file)
-
             context['chose_file_form'] = form
-
         context['files'] = files
-
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
@@ -40,14 +36,11 @@ class FormattingView(View):
         file_id = self.request.GET.get('file_id')
         file = self.model.objects.get(pk=file_id)
         form = self.form_class(file, request.POST)
-
         if form.is_valid():
             instance = form.save(commit=False)
             instance.file = file
             instance.save()
-
             context['message'] = 'Validator was added successfully'
-
         return render(request, self.template_name, context)
 
 
@@ -62,21 +55,16 @@ class ManageFormattersView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         object_list = context['object_list']
-
         if not object_list:
             context['empty_object_list'] = True
-
         return context
 
     def post(self, request, *args, **kwargs):
         qs = self.get_queryset()
-        
         for obj in qs:
             obj.applied = True
             obj.save()
-        
         return redirect(reverse_lazy('manage-formatters'))
 
 
@@ -118,7 +106,6 @@ class FormatFileView(View):
     @staticmethod
     def formatters_to_dict(formatters):
         result = []
-        
         for obj in formatters:
             result.append({
                 'column': obj.column.column,
@@ -127,7 +114,6 @@ class FormatFileView(View):
                 'skip_row': obj.skip_row,
                 'new_value': obj.new_value,
             })
-        
         return result
 
     def get(self, request, *args, **kwargs):
@@ -139,9 +125,7 @@ class FormatFileView(View):
         formatters_qs = ValidationModel.objects.filter(file=file_obj).filter(applied=True)
 
         if not formatters_qs:
-            
             context['error'] = "You don't have any formatters"
-
             return render(request, self.template_name, context)
 
         formatters = self.formatters_to_dict(formatters_qs)
@@ -155,11 +139,9 @@ class FormatFileView(View):
     def read_file(self, file_path):
         file_path = os.path.join('/', *BASE_DIR.split('/'), *file_path.split('/'))
         file_extension = os.path.splitext(file_path)[-1]
-
         if file_extension in self.valid_extensions:
             separator = self.valid_separators[file_extension]
             file_df = pd.read_csv(file_path, sep=separator)
-
             return file_df
 
     def update_file(self, file_path, df):
@@ -188,7 +170,6 @@ class FormatFileView(View):
             elif inequality == '>=':
                 if old_value >= value:
                     return new_value if new_value is not None else old_value
-
             return old_value
 
         def filter_df(df, column, inequality, value):
@@ -205,7 +186,6 @@ class FormatFileView(View):
                 df_filtered = df[df[column] < value]
             else:
                 df_filtered = df
-
             return df_filtered
 
         for formatter in formatters:
