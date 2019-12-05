@@ -1,4 +1,4 @@
-Django==2.2.5
+Django==2.2.8
 pandas==0.25.1
 django-allauth==0.40.0
 django-crispy-forms==1.7.2
